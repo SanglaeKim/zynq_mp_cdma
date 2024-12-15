@@ -45,7 +45,7 @@ int Enable_IntrruptSystem(XScuGic *hGICInstPtr, u16 IntrruptId,	Xil_ExceptionHan
 int Enable_CMDA_Intrrupt (XScuGic *IntcInstancePtr, XAxiCdma *InstancePtr, u32 IntrId);
 
 void initStSram(StSram *pStSram, u32 numElements);
-int writeWeightToSram(StSram *pStSram);
+int writeFmapToSram(StSram *pStSram);
 int setupSram();
 int writeToFile(u8 *pBuffer, u32 uiNumBytes, u8 fileNameIndex);
 

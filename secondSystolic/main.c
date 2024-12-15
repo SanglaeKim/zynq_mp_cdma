@@ -141,7 +141,7 @@ int main() {
 			// Invalidate the DestBuffer before receiving the data, in case the Data Cache is enabled
 			Xil_DCacheInvalidateRange((UINTPTR) &DesBuffer, NUM_BYTES_UL);
 
-			writeToFile(&DesBuffer[0], NUM_BYTES_UL, fileNameIndex++);
+//			writeToFile(&DesBuffer[0], NUM_BYTES_UL, fileNameIndex);
 
 			if (Status == XST_FAILURE) cdmaErrCount++;
 
@@ -317,7 +317,7 @@ void initStSram(StSram *pStSram, u32 numElements) {
 	char fileName[32];
 
 	for (int i = 0; i < numElements; i++) {
-		sprintf(fileName, "w%d", i);
+		sprintf(fileName, "fMap%d.bin", i);
 		pStSram->pBase = (uintptr_t) (Base + Offset * i);
 		pStSram->numBytes = NUM_BYTES_WEIGHT;
 		strncpy(pStSram->FileName, fileName, sizeof(fileName));
@@ -325,13 +325,13 @@ void initStSram(StSram *pStSram, u32 numElements) {
 	}
 }
 
-int writeWeightToSram(StSram *pStSram) {
+int writeFmapToSram(StSram *pStSram) {
 
 	FRESULT Res;
 	UINT NumBytesRead;
 	SD_File = pStSram->FileName;
 
-	Res = f_open(&fil, SD_File, FA_CREATE_ALWAYS | FA_WRITE | FA_READ);
+	Res = f_open(&fil, SD_File,  FA_READ);
 	if (Res) return XST_FAILURE;
 
 	Res = f_read(&fil, (void*) ucWeightArr, pStSram->numBytes, &NumBytesRead);
@@ -361,7 +361,7 @@ int setupSram() {
 	if (Res != FR_OK) return XST_FAILURE;
 
 	for (int i = 0; i < NUM_WEIGHT_RAMS; i++) {
-		writeWeightToSram(&StSramArr[i]);
+		writeFmapToSram(&StSramArr[i]);
 	}
 
 	return XST_SUCCESS;
